@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎨 Palette Playground & Color Contrast Checker</title>
+    <link rel="stylesheet" href="/src/main.css" />
+  </head>
+  <body
+    class="h-full flex flex-col font-sans selection:bg-indigo-500 selection:text-white"
+  >
+    <!-- Skip to Content Link for keyboard/screen reader users -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    >
+      Skip to content
+    </a>
+
+    <!-- Header Section -->
+    <header
+      class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md px-6 py-4 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-3">
+        <span class="text-3xl" role="img" aria-label="Palette Icon">🎨</span>
+        <div>
+          <h1
+            class="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent"
+          >
+            Palette Playground
+          </h1>
+          <p class="text-xs text-slate-400">
+            Micro-UX Color Contrast & Palette Accessibility Checker
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          id="shortcuts-btn"
+          aria-label="Show keyboard shortcuts (?)"
+          aria-expanded="false"
+          aria-keyshortcuts="?"
+          class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none transition-colors duration-200 text-slate-300"
+          title="Keyboard Shortcuts (?)"
+        >
+          <!-- Keyboard icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="lucide lucide-keyboard"
+          >
+            <path d="M10 8h.01" />
+            <path d="M12 12h.01" />
+            <path d="M14 8h.01" />
+            <path d="M16 12h.01" />
+            <path d="M18 8h.01" />
+            <path d="M6 8h.01" />
+            <path d="M7 16h10" />
+            <path d="M8 12h.01" />
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+          </svg>
+        </button>
+        <button
+          id="theme-toggle"
+          aria-label="Toggle High Contrast Mode"
+          aria-keyshortcuts="t"
+          aria-pressed="false"
+          class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none transition-colors duration-200 text-slate-300"
+          title="Toggle High Contrast Mode (T)"
+        >
+          <!-- Light bulb/High contrast icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="lucide lucide-sun"
+          >
+            <path d="M12 2v2" />
+            <path d="M12 20v2" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="M20 12h2" />
+            <path d="m6.34 17.66-1.41 1.41" />
+            <path d="m19.07 4.93-1.41 1.41" />
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main
+      id="main-content"
+      class="flex-1 overflow-y-auto px-4 py-8 max-w-6xl w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-8"
+      tabindex="-1"
+    >
+      <!-- Interactive Inputs Column -->
+      <section
+        class="md:col-span-5 flex flex-col gap-6"
+        aria-labelledby="controls-heading"
+      >
+        <div
+          class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col gap-6"
+        >
+          <h2
+            id="controls-heading"
+            class="text-lg font-semibold text-slate-200 border-b border-slate-800 pb-3 flex items-center justify-between"
+          >
+            <span>Color Controls</span>
+            <button
+              id="randomize-btn"
+              aria-label="Generate random accessible palette"
+              aria-keyshortcuts="r"
+              title="Generate random accessible palette (R)"
+              class="text-xs px-3 py-1.5 bg-indigo-600/30 text-indigo-400 hover:bg-indigo-600/40 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none rounded-lg font-medium transition-colors duration-200 flex items-center gap-1.5"
+            >
+              <span>🎲 Randomize</span>
+              <kbd
+                class="px-1.5 py-0.5 text-[10px] font-sans bg-slate-950/80 text-indigo-300 border border-indigo-500/20 rounded shadow-sm"
+                >R</kbd
+              >
+            </button>
+          </h2>
+
+          <!-- Background Color Input -->
+          <div class="flex flex-col gap-2">
+            <div
+              class="text-sm font-medium text-slate-300 flex items-center justify-between"
+            >
+              <label for="bg-color">Background Color</label>
+              <button
+                id="bg-hex-display"
+                type="button"
+                aria-label="Copy background color hex #0F172A"
+                title="Copy background color hex #0F172A"
+                class="font-mono text-xs text-slate-400 hover:text-indigo-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded px-1 transition-colors cursor-pointer"
+              >
+                #0F172A
+              </button>
+            </div>
+            <div class="flex gap-3">
+              <div
+                class="relative w-12 h-10 rounded-lg border border-slate-700 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-slate-900 overflow-hidden shrink-0"
+              >
+                <input
+                  id="bg-color"
+                  type="color"
+                  value="#0F172A"
+                  aria-label="Select background color"
+                  class="absolute inset-0 w-full h-full p-0 border-0 cursor-pointer bg-transparent"
+                />
+              </div>
+              <div class="relative flex-1">
+                <input
+                  id="bg-hex-input"
+                  type="text"
+                  value="#0f172a"
+                  maxlength="7"
+                  placeholder="#000000"
+                  aria-label="Background hex color code"
+                  class="w-full h-10 px-3 bg-slate-950 border border-slate-800 rounded-lg focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-200 font-mono text-sm placeholder-slate-600"
+                />
+                <span
+                  id="bg-error"
+                  class="hidden absolute right-3 top-2.5 text-xs text-red-400 font-medium"
+                  role="alert"
+                  >Invalid Hex</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Foreground Color Input -->
+          <div class="flex flex-col gap-2">
+            <div
+              class="text-sm font-medium text-slate-300 flex items-center justify-between"
+            >
+              <label for="fg-color">Foreground Color</label>
+              <button
+                id="fg-hex-display"
+                type="button"
+                aria-label="Copy foreground color hex #E2E8F0"
+                title="Copy foreground color hex #E2E8F0"
+                class="font-mono text-xs text-slate-400 hover:text-indigo-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded px-1 transition-colors cursor-pointer"
+              >
+                #E2E8F0
+              </button>
+            </div>
+            <div class="flex gap-3">
+              <div
+                class="relative w-12 h-10 rounded-lg border border-slate-700 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-slate-900 overflow-hidden shrink-0"
+              >
+                <input
+                  id="fg-color"
+                  type="color"
+                  value="#E2E8F0"
+                  aria-label="Select foreground color"
+                  class="absolute inset-0 w-full h-full p-0 border-0 cursor-pointer bg-transparent"
+                />
+              </div>
+              <div class="relative flex-1">
+                <input
+                  id="fg-hex-input"
+                  type="text"
+                  value="#e2e8f0"
+                  maxlength="7"
+                  placeholder="#ffffff"
+                  aria-label="Foreground hex color code"
+                  class="w-full h-10 px-3 bg-slate-950 border border-slate-800 rounded-lg focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-200 font-mono text-sm placeholder-slate-600"
+                />
+                <span
+                  id="fg-error"
+                  class="hidden absolute right-3 top-2.5 text-xs text-red-400 font-medium"
+                  role="alert"
+                  >Invalid Hex</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Swapper & Presets -->
+          <div
+            class="flex items-center justify-between gap-4 border-t border-slate-800 pt-4"
+          >
+            <button
+              id="swap-colors-btn"
+              aria-label="Swap background and foreground colors"
+              aria-keyshortcuts="s"
+              title="Swap background and foreground colors (S)"
+              class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none rounded-lg transition-colors flex items-center gap-2 text-sm"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                class="lucide lucide-repeat"
+              >
+                <path d="m17 2 4 4-4 4" />
+                <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+                <path d="m7 22-4-4 4-4" />
+                <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+              </svg>
+              <span>Swap Colors</span>
+              <kbd
+                class="px-1.5 py-0.5 text-[10px] font-sans bg-slate-950/80 text-slate-400 border border-slate-700 rounded shadow-sm"
+                >S</kbd
+              >
+            </button>
+            <div
+              class="flex gap-1.5"
+              role="group"
+              aria-label="Quick preset themes"
+            >
+              <button
+                data-bg="#000000"
+                data-fg="#ffffff"
+                class="preset-btn w-6 h-6 rounded-full border border-slate-700 bg-black hover:scale-110 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 focus-visible:outline-none transition-transform"
+                title="Black & White"
+                aria-label="Black and white theme preset"
+                aria-pressed="false"
+              ></button>
+              <button
+                data-bg="#1e1b4b"
+                data-fg="#e0e7ff"
+                class="preset-btn w-6 h-6 rounded-full border border-indigo-900 bg-indigo-950 hover:scale-110 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 focus-visible:outline-none transition-transform"
+                title="Indigo Night"
+                aria-label="Indigo night theme preset"
+                aria-pressed="false"
+              ></button>
+              <button
+                data-bg="#022c22"
+                data-fg="#d1fae5"
+                class="preset-btn w-6 h-6 rounded-full border border-emerald-950 bg-emerald-950 hover:scale-110 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 focus-visible:outline-none transition-transform"
+                title="Emerald Forest"
+                aria-label="Emerald forest theme preset"
+                aria-pressed="false"
+              ></button>
+              <button
+                data-bg="#f8fafc"
+                data-fg="#0f172a"
+                class="preset-btn w-6 h-6 rounded-full border border-slate-200 bg-slate-50 hover:scale-110 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 focus-visible:outline-none transition-transform"
+                title="Slate Light"
+                aria-label="Slate light theme preset"
+                aria-pressed="false"
+              ></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accessible Copy Utilities -->
+        <div
+          class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col gap-4"
+        >
+          <h3 class="text-sm font-semibold text-slate-300">
+            Quick Palette Actions
+          </h3>
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              id="copy-bg-btn"
+              aria-label="Copy background color hex"
+              aria-keyshortcuts="b"
+              title="Copy background color hex (B)"
+              class="px-2.5 py-2 bg-slate-800 hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none text-xs font-mono text-slate-300 rounded-lg transition-colors flex items-center justify-center gap-1.5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                class="lucide lucide-copy shrink-0"
+              >
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+              <span>Copy BG</span>
+              <kbd
+                class="px-1.5 py-0.5 text-[10px] font-sans bg-slate-950/80 text-slate-400 border border-slate-700 rounded shadow-sm"
+                >B</kbd
+              >
+            </button>
+            <button
+              id="copy-fg-btn"
+              aria-label="Copy foreground color hex"
+              aria-keyshortcuts="f"
+              title="Copy foreground color hex (F)"
+              class="px-2.5 py-2 bg-slate-800 hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none text-xs font-mono text-slate-300 rounded-lg transition-colors flex items-center justify-center gap-1.5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                class="lucide lucide-copy shrink-0"
+              >
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+              <span>Copy FG</span>
+              <kbd
+                class="px-1.5 py-0.5 text-[10px] font-sans bg-slate-950/80 text-slate-400 border border-slate-700 rounded shadow-sm"
+                >F</kbd
+              >
+            </button>
+            <button
+              id="copy-css-btn"
+              aria-label="Copy CSS variables for palette"
+              aria-keyshortcuts="c"
+              title="Copy CSS variables for palette (C)"
+              class="px-2.5 py-2 bg-slate-800 hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none text-xs font-mono text-slate-300 rounded-lg transition-colors flex items-center justify-center gap-1.5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                class="lucide lucide-code shrink-0"
+              >
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+              <span>Copy CSS</span>
+              <kbd
+                class="px-1.5 py-0.5 text-[10px] font-sans bg-slate-950/80 text-slate-400 border border-slate-700 rounded shadow-sm"
+                >C</kbd
+              >
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Preview & WCAG Checker Column -->
+      <section
+        class="md:col-span-7 flex flex-col gap-6"
+        aria-labelledby="preview-heading"
+      >
+        <h2 id="preview-heading" class="sr-only">
+          Live Color Preview and WCAG Contrast Assessment
+        </h2>
+
+        <!-- Live Color Canvas (Simulates User Interface) -->
+        <div
+          id="live-canvas"
+          class="rounded-xl border border-slate-800 shadow-2xl p-8 flex flex-col justify-between min-h-[220px] transition-colors duration-200"
+          style="background-color: #0f172a; color: #e2e8f0"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <span class="text-xs font-mono tracking-widest uppercase opacity-75"
+              >Visual Preview</span
+            >
+          </div>
+
+          <div class="my-6">
+            <h3 class="text-2xl font-bold leading-tight" id="preview-title">
+              Empowering Web Accessibility
+            </h3>
+            <p
+              class="text-sm mt-2 opacity-90 max-w-lg leading-relaxed"
+              id="preview-text"
+            >
+              Color contrast determines how easily users, including those with
+              visual impairments, can distinguish content. Good contrast is
+              fundamental for readability.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button
+              id="preview-primary-btn"
+              title="Interactive primary action preview"
+              class="px-4 py-2 rounded-lg font-medium text-sm transition-all shadow-md hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+              style="background-color: #e2e8f0; color: #0f172a"
+              aria-describedby="contrast-ratio-display"
+            >
+              Primary Action
+            </button>
+            <button
+              id="preview-secondary-btn"
+              title="Interactive secondary action preview"
+              class="px-4 py-2 rounded-lg font-medium text-sm transition-all border border-current opacity-80 hover:opacity-100 hover:scale-105 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+              aria-describedby="contrast-ratio-display"
+            >
+              Secondary Info
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic WCAG Metrics Card -->
+        <div
+          class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"
+        >
+          <div
+            class="flex flex-col sm:flex-row items-baseline sm:items-center justify-between gap-2 border-b border-slate-800 pb-4"
+          >
+            <h3
+              class="text-base font-semibold text-slate-200 flex items-center gap-2 flex-wrap"
+            >
+              <span>WCAG 2.1 Contrast Assessment</span>
+              <button
+                id="autofix-btn"
+                aria-label="Auto-fix contrast ratio to pass WCAG AA"
+                aria-keyshortcuts="a"
+                title="Auto-fix contrast ratio to pass WCAG AA (A)"
+                class="hidden text-xs px-2.5 py-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/30 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none rounded-lg font-medium transition-colors flex items-center gap-1.5"
+              >
+                <span>⚡ Auto-Fix</span>
+                <kbd
+                  class="px-1.5 py-0.5 text-[10px] font-sans bg-slate-950/80 text-amber-300 border border-amber-500/20 rounded shadow-sm"
+                  >A</kbd
+                >
+              </button>
+            </h3>
+            <div class="flex items-center gap-2">
+              <span
+                id="contrast-ratio-display"
+                aria-live="polite"
+                aria-atomic="true"
+                class="text-3xl font-bold font-mono text-indigo-400"
+                >14.3:1</span
+              >
+              <span class="text-xs text-slate-500">contrast ratio</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+            <!-- Normal Text Compliance Block -->
+            <div
+              class="p-4 bg-slate-950 border border-slate-800 rounded-lg flex flex-col gap-3"
+            >
+              <h4
+                class="text-xs font-semibold tracking-wider text-slate-400 uppercase"
+              >
+                Normal Text (&lt; 18pt)
+              </h4>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-sm text-slate-300">WCAG AA Compliance</span>
+                <span
+                  id="normal-aa-badge"
+                  class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    class="lucide lucide-check"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  PASS (4.5:1)
+                </span>
+              </div>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-sm text-slate-300">WCAG AAA Compliance</span>
+                <span
+                  id="normal-aaa-badge"
+                  class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    class="lucide lucide-check"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  PASS (7.0:1)
+                </span>
+              </div>
+            </div>
+
+            <!-- Large Text Compliance Block -->
+            <div
+              class="p-4 bg-slate-950 border border-slate-800 rounded-lg flex flex-col gap-3"
+            >
+              <h4
+                class="text-xs font-semibold tracking-wider text-slate-400 uppercase"
+              >
+                Large Text (≥ 18pt / Bold ≥ 14pt)
+              </h4>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-sm text-slate-300">WCAG AA Compliance</span>
+                <span
+                  id="large-aa-badge"
+                  class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    class="lucide lucide-check"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  PASS (3.0:1)
+                </span>
+              </div>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-sm text-slate-300">WCAG AAA Compliance</span>
+                <span
+                  id="large-aaa-badge"
+                  class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    class="lucide lucide-check"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  PASS (4.5:1)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Area -->
+    <footer
+      class="border-t border-slate-800 bg-slate-950 px-4 py-4 text-center text-xs text-slate-500"
+    >
+      Built with pure web accessibility best practices & UX excellence. Check
+      contrast, empower experience.
+    </footer>
+
+    <!-- Delightful micro-UX status and notification center (Toasts & Live region) -->
+    <div
+      id="toast-container"
+      class="fixed bottom-6 right-6 flex flex-col gap-2 z-50 pointer-events-none"
+      aria-live="polite"
+      role="status"
+    ></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
